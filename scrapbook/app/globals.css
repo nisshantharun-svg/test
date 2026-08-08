@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+:root {
+  --kraft: #c1a06b;
+  --kraft-dark: #96784a;
+  --cardstock: #f5e9d0;
+  --cardstock-edge: #e8d7ae;
+  --ink: #33404d;
+  --rose: #c1707a;
+  --teal: #4f8b82;
+  --gold: #c99a3e;
+}
+
+@theme inline {
+  --color-kraft: var(--kraft);
+  --color-kraft-dark: var(--kraft-dark);
+  --color-cardstock: var(--cardstock);
+  --color-cardstock-edge: var(--cardstock-edge);
+  --color-ink: var(--ink);
+  --color-rose: var(--rose);
+  --color-teal: var(--teal);
+  --color-gold: var(--gold);
+  --font-display: var(--font-caveat);
+  --font-sans: var(--font-geist-sans);
+  --font-typewriter: var(--font-special-elite);
+}
+
+body {
+  background-color: var(--kraft);
+  color: var(--ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Procedural paper grain, no image asset required. Layered on top of any
+   element via the .paper-grain class; opacity kept low so it reads as
+   texture rather than noise. */
+.paper-grain {
+  position: relative;
+}
+.paper-grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.22;
+  mix-blend-mode: multiply;
+}
+
+/* Soft vignette behind the whole page, like a photo of a desk rather than
+   a flat fill. */
+.kraft-surface {
+  background-color: var(--kraft);
+  background-image:
+    radial-gradient(120% 90% at 50% -10%, rgba(255, 255, 255, 0.12), transparent 60%),
+    radial-gradient(140% 100% at 50% 110%, var(--kraft-dark), transparent 65%);
+}
+
+@keyframes settle-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96) rotate(var(--settle-rotate, 0deg));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(var(--settle-rotate, 0deg));
+  }
+}
+
+.animate-settle-in {
+  animation: settle-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+:focus-visible {
+  outline: 2px dashed var(--rose);
+  outline-offset: 3px;
+}
+
+::selection {
+  background-color: var(--gold);
+  color: var(--ink);
+}
